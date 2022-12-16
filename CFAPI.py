@@ -1,7 +1,7 @@
 from datetime import datetime
 import requests
 import sys
-import SchemaClasses as sc
+import SchemaClasses as schemas
 
 
 class CFAPI(object):
@@ -13,28 +13,41 @@ class CFAPI(object):
             "x-api-key": self.api_key
         }
 
-    def query_builder(self, func, *params):
-        print(type(func))
-        print(func)
+    def __query_builder(self, func, *params):
         assert type(func) == type(self.get_games), "func must be a function"
         values = dict(
             zip(func.__code__.co_varnames[:func.__code__.co_argcount][1:], params))
         return "?" + "&".join([f"{k}={v}" for k, v in values.items() if v is not None])
 
-    def get_games(self, index: int|None = None, pageSize: int|None = None) -> dict|int:
+    def get_games(self, index: int|None = None, pageSize: int|None = None) -> schemas.GetGamesResponse|schemas.ApiResponseCode:
+        #region init
+        #region bounds checking
+        if index is not None:
+            if not 0 <= index <= 10000:
+                return schemas.ApiResponseCode.BadRequest
+        if pageSize is not None:
+            if not 0 <= pageSize <= 50:
+                return schemas.ApiResponseCode.BadRequest
+        if index is not None and pageSize is not None:
+            if not index + pageSize <= 10000:
+                return schemas.ApiResponseCode.BadRequest
+        #endregion
         # region this init
         this = eval(f"self.{sys._getframe().f_code.co_name}")
         lvars = []
         for i in this.__code__.co_varnames[:this.__code__.co_argcount][1:]:
             lvars.append(locals()[i])
         # endregion
-
-        url = self.base_url + "/v1/games" + self.query_builder(this, *lvars)
+        url = self.base_url + "/v1/games" + self.__query_builder(this, *lvars)
+        #endregion
+        
         response = requests.get(url, headers=self.headers)
-        if response.status_code == 200:
-            return response.json()
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.GetGamesResponse(**response.json())
         else:
-            return response.status_code
+            return status
 
     def get_game(self, gameID: int) -> dict|int:
         # region this init
@@ -76,7 +89,7 @@ class CFAPI(object):
         # endregion
 
         url = self.base_url + "/v1/categories" + \
-            self.query_builder(this, *lvars)
+            self.__query_builder(this, *lvars)
         response = requests.get(url, headers=self.headers)
 
         if response.status_code == 200:
