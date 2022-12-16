@@ -3,11 +3,8 @@
 
 from CFAPI import CFAPI
 import os
+from env import CF_API
 
-myparam = 'a'
+cf = CFAPI(CF_API)
 
-my_secret = os.environ['CF_API_KEY']
-
-cf = CFAPI(my_secret)
-
-cf.get_games()
+print(cf.get_games())
