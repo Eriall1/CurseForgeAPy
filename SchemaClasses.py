@@ -4,6 +4,12 @@ from datetime import datetime
 
 
 #region Schemas
+
+# Base Class
+class Base(object):
+    def __str__(self):
+        return self.__class__.__name__
+
 # ApiResponseOfListOfMinecraftGameVersion Schema
 """
 Properties
@@ -12,7 +18,7 @@ data 	[MinecraftGameVersion] 	The response data
 """
 
 # ApiResponseOfListOfMinecraftGameVersion Class
-class ApiResponseOfListOfMinecraftGameVersion(object):
+class ApiResponseOfListOfMinecraftGameVersion(Base):
     def __init__(self, data: list[MinecraftGameVersion]):
         self.data: list[MinecraftGameVersion] = list(map(lambda x: MinecraftGameVersion(**x) if isinstance(x, dict) else x, data))
 
@@ -24,7 +30,7 @@ data 	[MinecraftModLoaderIndex] 	The response data
 """
 
 # ApiResponseOfListOfMinecraftModLoaderIndex Class
-class ApiResponseOfListOfMinecraftModLoaderIndex(object):
+class ApiResponseOfListOfMinecraftModLoaderIndex(Base):
     def __init__(self, data: list[MinecraftModLoaderIndex]):
         self.data: list[MinecraftModLoaderIndex] = list(map(lambda x: MinecraftModLoaderIndex(**x) if isinstance(x, dict) else x, data))
 
@@ -36,7 +42,7 @@ data 	MinecraftGameVersion 	The response data
 """
 
 # ApiResponseOfMinecraftGameVersion Class
-class ApiResponseOfMinecraftGameVersion(object):
+class ApiResponseOfMinecraftGameVersion(Base):
     def __init__(self, data: MinecraftGameVersion):
         self.data: MinecraftGameVersion = MinecraftGameVersion(**data) if isinstance(data, dict) else data
 
@@ -48,7 +54,7 @@ data 	MinecraftModLoaderVersion 	The response data
 """
 
 # ApiResponseOfMinecraftModLoaderVersion Class
-class ApiResponseOfMinecraftModLoaderVersion(object):
+class ApiResponseOfMinecraftModLoaderVersion(Base):
     def __init__(self, data: MinecraftModLoaderVersion):
         self.data: MinecraftModLoaderVersion = MinecraftModLoaderVersion(**data) if isinstance(data, dict) else data
 
@@ -69,14 +75,14 @@ displayIndex 	integer(int32)¦null 	The display index for this category
 """
 
 # Category Class
-class Category(object):  
+class Category(Base):  
     def __init__(self, id, gameId: int, name: str, slug: str, url: str, iconUrl: str, dateModified: datetime, isClass: bool|None = None, classId: int|None = None, parentCategoryId: int|None = None, displayIndex: int|None = None):
         self.id: int = int(id)
         self.gameId: int = int(gameId)
         self.name: str = str(name)
         self.slug: str = str(slug)
         self.url: str = str(url)
-        self.iconUrl: str = iconUrl
+        self.iconUrl: str = str(iconUrl)
         self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateModified, str) else dateModified
         self.isClass: bool | None = bool(isClass) if isClass is not None else None
         self.classId: int | None = int(classId) if classId is not None else None
@@ -138,7 +144,7 @@ recentlyUpdated 	[Mod] 	none
 """
 
 # FeaturedModsResponse Class
-class FeaturedModsResponse(object):
+class FeaturedModsResponse(Base):
     def __init__(self, featured: list[Mod], popular: list[Mod], recentlyUpdated: list[Mod]):
         self.featured: list[Mod] = list(map(lambda x: Mod(**x) if isinstance(x, dict) else x, featured))
         self.popular: list[Mod] = list(map(lambda x: Mod(**x) if isinstance(x, dict) else x, popular))
@@ -174,7 +180,7 @@ modules 	[FileModule] 	none
 """
 
 # File Class
-class File(object):
+class File(Base):
     def __init__(self, id: int, gameId: int, modId: int, isAvailable: bool, displayName: str, fileName: str, releaseType: FileReleaseType, fileStatus: FileStatus, hashes: list[FileHash], fileDate: str, fileLength: int, downloadCount: int, downloadUrl: str, gameVersions: list[str], sortableGameVersions: list[SortableGameVersion], dependencies: list[FileDependency], fileFingerprint: int, modules: list[FileModule], exposeAsAlternative: bool | None = None, parentProjectFileId: int | None = None, alternateFileId: int | None = None, isServerPack: bool | None = None, serverPackFileId: int | None = None):
         self.id: int = int(id)
         self.gameId: int = int(gameId)
@@ -232,7 +238,7 @@ algo 	HashAlgo 	1 = Sha1
 """
 
 # FileHash Class
-class FileHash(object):
+class FileHash(Base):
     def __init__(self, value: str, algo: HashAlgo):
         self.value: str = str(value)
         self.algo: HashAlgo = HashAlgo(algo)
@@ -257,7 +263,7 @@ modLoader 	ModLoaderType 	0 = Any
 """
 
 # FileIndex Class
-class FileIndex(object):
+class FileIndex(Base):
     def __init__(self, gameVersion: str, fileId: int, filename: str, releaseType: FileReleaseType, modLoader: ModLoaderType, gameVersionTypeId: int | None = None):
         self.gameVersion: str = str(gameVersion)
         self.fileId: int = int(fileId)
@@ -275,7 +281,7 @@ fingerprint 	integer(int64) 	none
 """
 
 # FileModule Class
-class FileModule(object):
+class FileModule(Base):
     def __init__(self, name: str, fingerprint: int):
         self.name: str = str(name)
         self.fingerprint: int = int(fingerprint)
@@ -388,7 +394,7 @@ fingerprints 	[integer] 	none
 """
 
 # FingerprintFuzzyMatch Class
-class FingerprintFuzzyMatch(object):
+class FingerprintFuzzyMatch(Base):
     def __init__(self, id: int, file: File, latestFiles: list[File], fingerprints: list[int]):
         self.id: int = int(id)
         self.file: File = File(**file) if isinstance(file, dict) else file
@@ -403,7 +409,7 @@ fuzzyMatches 	[FingerprintFuzzyMatch] 	none
 """
 
 # FingerprintFuzzyMatchResult Class
-class FingerprintFuzzyMatchResult(object):
+class FingerprintFuzzyMatchResult(Base):
     def __init__(self, fuzzyMatches: list[FingerprintFuzzyMatch]):
         self.fuzzyMatches: list[FingerprintFuzzyMatch] = list(map(lambda x: FingerprintFuzzyMatch(**x) if isinstance(x, dict) else x, fuzzyMatches))
 
@@ -417,7 +423,7 @@ latestFiles 	[File] 	none
 """
 
 # FingerprintMatch Class
-class FingerprintMatch(object):
+class FingerprintMatch(Base):
     def __init__(self, id: int, file: File, latestFiles: list[File]):
         self.id: int = int(id)
         self.file: File = File(**file) if isinstance(file, dict) else file
@@ -438,7 +444,7 @@ unmatchedFingerprints 	[integer] 	none
 """
 
 # FingerprintsMatchesResult Class
-class FingerprintsMatchesResult(object):
+class FingerprintsMatchesResult(Base):
     def __init__(self, isCacheBuilt: bool, exactMatches: list[FingerprintMatch], exactFingerprints: list[int], partialMatches: list[FingerprintMatch], partialMatchFingerprints: object, installedFingerprints: list[int], unmatchedFingerprints: list[int]):
         self.isCacheBuilt: bool = bool(isCacheBuilt)
         self.exactMatches: list[FingerprintMatch] = list(map(lambda x: FingerprintMatch(**x) if isinstance(x, dict) else x, exactMatches))
@@ -457,7 +463,7 @@ fingerprints 	[integer] 	none
 """
 
 # FolderFingerprint Class
-class FolderFingerprint(object):
+class FolderFingerprint(Base):
     def __init__(self, foldername: str, fingerprints: list[int]):
         self.foldername: str = str(foldername)
         self.fingerprints: list[int] = list(map(int, fingerprints))
@@ -482,12 +488,12 @@ apiStatus 	CoreApiStatus 	1 = Private
 """
 
 # Game Class
-class Game(object):
+class Game(Base):
     def __init__(self, id: int, name: str, slug: str, dateModified: datetime, assets: GameAssets, status: CoreStatus, apiStatus: CoreApiStatus):
         self.id: int = int(id)
         self.name: str = str(name)
         self.slug: str = str(slug)
-        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%XZ") if isinstance(dateModified, str) else dateModified
+        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateModified, str) else dateModified
         self.assets: GameAssets = GameAssets(**assets) if isinstance(assets, dict) else assets
         self.status: CoreStatus = CoreStatus(status)
         self.apiStatus: CoreApiStatus = CoreApiStatus(apiStatus)
@@ -502,7 +508,7 @@ coverUrl 	string 	none
 """
 
 # GameAssets Class
-class GameAssets(object):
+class GameAssets(Base):
     def __init__(self, iconUrl: str, tileUrl: str, coverUrl: str):
         self.iconUrl: str = str(iconUrl)
         self.tileUrl: str = str(tileUrl)
@@ -517,7 +523,7 @@ versions 	[string] 	none
 """
 
 # GameVersionsByType Class
-class GameVersionsByType(object):
+class GameVersionsByType(Base):
     def __init__(self, type: int, versions: list[str]):
         self.type: int = int(type)
         self.versions: list[str] = list(map(str, versions))
@@ -550,7 +556,7 @@ slug 	string 	none
 """
 
 # GameVersionType Class
-class GameVersionType(object):
+class GameVersionType(Base):
     def __init__(self, id: int, gameId: int, name: str, slug: str):
         self.id: int = int(id)
         self.gameId: int = int(gameId)
@@ -579,7 +585,7 @@ data 	[Category] 	The response data
 """
 
 # GetCategoriesResponse Class
-class GetCategoriesResponse(object):
+class GetCategoriesResponse(Base):
     def __init__(self, data: Category):
         self.data: Category = Category(**data) if isinstance(data, dict) else data
 
@@ -591,7 +597,7 @@ data 	FeaturedModsResponse 	The response data
 """
 
 # GetFeaturedModsResponse Class
-class GetFeaturedModsResponse(object):
+class GetFeaturedModsResponse(Base):
     def __init__(self, data: FeaturedModsResponse):
         self.data: FeaturedModsResponse = FeaturedModsResponse(**data) if isinstance(data, dict) else data
 
@@ -603,7 +609,7 @@ data 	[File] 	The response data
 """
 
 # GetFilesResponse Class
-class GetFilesResponse(object):
+class GetFilesResponse(Base):
     def __init__(self, data: list[File]):
         self.data: list[File] = list(map(lambda x: File(**x) if isinstance(x, dict) else x, data))
 
@@ -615,7 +621,7 @@ data 	FingerprintsMatchesResult 	The response data
 """
 
 # GetFingerprintMatchesResponse Class
-class GetFingerprintMatchesResponse(object):
+class GetFingerprintMatchesResponse(Base):
     def __init__(self, data: FingerprintsMatchesResult):
         self.data: FingerprintsMatchesResult = FingerprintsMatchesResult(**data) if isinstance(data, dict) else data
 
@@ -627,7 +633,7 @@ data 	FingerprintFuzzyMatchResult 	The response data
 """
 
 # GetFingerprintsFuzzyMatchesResponse Class
-class GetFingerprintsFuzzyMatchesResponse(object):
+class GetFingerprintsFuzzyMatchesResponse(Base):
     def __init__(self, data: FingerprintFuzzyMatchResult):
         self.data: FingerprintFuzzyMatchResult = FingerprintFuzzyMatchResult(**data) if isinstance(data, dict) else data
 
@@ -639,7 +645,7 @@ data 	Game 	The response data
 """
 
 # GetGameResponse Class
-class GetGameResponse(object):
+class GetGameResponse(Base):
     def __init__(self, data: Game):
         self.data: Game = Game(**data) if isinstance(data, dict) else data
 
@@ -652,7 +658,7 @@ pagination 	Pagination 	The response pagination information
 """
 
 # GetGamesResponse Class
-class GetGamesResponse(object):
+class GetGamesResponse(Base):
     def __init__(self, data: list[Game], pagination: Pagination):
         self.data: list[Game] = list(map(lambda x: Game(**x) if isinstance(x, dict) else x, data))
         self.pagination: Pagination = Pagination(**pagination) if isinstance(pagination, dict) else pagination
@@ -665,7 +671,7 @@ data 	File 	The response data
 """
 
 # GetModFileResponse Class
-class GetModFileResponse(object):
+class GetModFileResponse(Base):
     def __init__(self, data: File):
         self.data: File = File(**data) if isinstance(data, dict) else data
 
@@ -678,7 +684,7 @@ pagination 	Pagination 	The response pagination information
 """
 
 # GetModFilesResponse Class
-class GetModFilesResponse(object):
+class GetModFilesResponse(Base):
     def __init__(self, data: list[File], pagination: Pagination):
         self.data: list[File] = list(map(lambda x: File(**x) if isinstance(x, dict) else x, data))
         self.pagination: Pagination = Pagination(**pagination) if isinstance(pagination, dict) else pagination
@@ -691,7 +697,7 @@ data 	Mod 	The response data
 """
 
 # GetModResponse Class
-class GetModResponse(object):
+class GetModResponse(Base):
     def __init__(self, data: Mod):
         self.data: Mod = Mod(**data) if isinstance(data, dict) else data
 
@@ -703,7 +709,7 @@ data 	[Mod] 	The response data
 """
 
 # GetModsResponse Class
-class GetModsResponse(object):
+class GetModsResponse(Base):
     def __init__(self, data: list[Mod]):
         self.data: list[Mod] = list(map(lambda x: Mod(**x) if isinstance(x, dict) else x, data))
 
@@ -715,7 +721,7 @@ data 	[GameVersionType] 	The response data
 """
 
 # GetVersionTypesResponse Class
-class GetVersionTypesResponse(object):
+class GetVersionTypesResponse(Base):
     def __init__(self, data: list[GameVersionType]):
         self.data: list[GameVersionType] = list(map(lambda x: GameVersionType(**x) if isinstance(x, dict) else x, data))
 
@@ -727,7 +733,7 @@ data 	[GameVersionsByType] 	The response data
 """
 
 # GetVersionsResponse Class
-class GetVersionsResponse(object):
+class GetVersionsResponse(Base):
     def __init__(self, data: list[GameVersionsByType]):
         self.data: list[GameVersionsByType] = list(map(lambda x: GameVersionsByType(**x) if isinstance(x, dict) else x, data))
 
@@ -741,7 +747,7 @@ gameVersionTypeId 	integer(int32)¦null 	none
 """
 
 # GetFeaturedModsRequestBody Class
-class GetFeaturedModsRequestBody(object):
+class GetFeaturedModsRequestBody(Base):
     def __init__(self, gameId: int, excludedModIds: list[int], gameVersionTypeId: int):
         self.gameId: int = int(gameId)
         self.excludedModIds: list[int] = list(map(int, excludedModIds))
@@ -755,7 +761,7 @@ fingerprints 	[integer] 	none
 """
 
 # GetFingerprintMatchesRequestBody Class
-class GetFingerprintMatchesRequestBody(object):
+class GetFingerprintMatchesRequestBody(Base):
     def __init__(self, fingerprints: list[int]):
         self.fingerprints: list[int] = list(map(int, fingerprints))
 
@@ -768,7 +774,7 @@ fingerprints 	[FolderFingerprint] 	none
 """
 
 # GetFuzzyMatchesRequestBody Class
-class GetFuzzyMatchesRequestBody(object):
+class GetFuzzyMatchesRequestBody(Base):
     def __init__(self, gameId: int, fingerprints: list[FolderFingerprint]):
         self.gameId: int = int(gameId)
         self.fingerprints: list[FolderFingerprint] = list(map(lambda x: FolderFingerprint(**x) if isinstance(x, dict) else x, fingerprints))
@@ -781,7 +787,7 @@ fileIds 	[integer] 	none
 """
 
 # GetModFilesRequestBody Class
-class GetModFilesRequestBody(object):
+class GetModFilesRequestBody(Base):
     def __init__(self, fileIds: list[int]):
         self.fileIds: list[int] = list(map(int, fileIds))
 
@@ -793,7 +799,7 @@ modIds 	[integer] 	none
 """
 
 # GetModsByIdsListRequestBody Class
-class GetModsByIdsListRequestBody(object):
+class GetModsByIdsListRequestBody(Base):
     def __init__(self, modIds: list[int]):
         self.modIds: list[int] = list(map(int, modIds))
 
@@ -831,7 +837,7 @@ gameVersionTypeStatus 	GameVersionTypeStatus 	1 = Normal
 """
 
 # MinecraftGameVersion Class
-class MinecraftGameVersion(object):
+class MinecraftGameVersion(Base):
     def __init__(self, id: int, gameVersionId: int, versionString: str, jarDownloadUrl: str, jsonDownloadUrl: str, approved: bool, dateModified: datetime, gameVersionTypeId: int, gameVersionStatus: GameVersionStatus, gameVersionTypeStatus: GameVersionTypeStatus):
         self.id: int = int(id)
         self.gameVersionId: int = int(gameVersionId)
@@ -839,7 +845,7 @@ class MinecraftGameVersion(object):
         self.jarDownloadUrl: str = str(jarDownloadUrl)
         self.jsonDownloadUrl: str = str(jsonDownloadUrl)
         self.approved: bool = bool(approved)
-        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%XZ") if isinstance(dateModified, str) else dateModified
+        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateModified, str) else dateModified
         self.gameVersionTypeId: int = int(gameVersionTypeId)
         self.gameVersionStatus: GameVersionStatus = GameVersionStatus(gameVersionStatus) 
         self.gameVersionTypeStatus: GameVersionTypeStatus = GameVersionTypeStatus(gameVersionTypeStatus)
@@ -862,13 +868,13 @@ type 	ModLoaderType 	0 = Any
 """
 
 # MinecraftModLoaderIndex Class
-class MinecraftModLoaderIndex(object):
+class MinecraftModLoaderIndex(Base):
     def __init__(self, name: str, gameVersion: str, latest: bool, recommended: bool, dateModified: datetime, type: ModLoaderType):
         self.name: str = str(name)
         self.gameVersion: str = str(gameVersion)
         self.latest: bool = bool(latest)
         self.recommended: bool = bool(recommended)
-        self.dateModified: datetime =  datetime.strptime(dateModified, "%Y-%m-%dT%XZ") if isinstance(dateModified, str) else dateModified
+        self.dateModified: datetime =  datetime.strptime(dateModified, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateModified, str) else dateModified
         self.type: ModLoaderType = ModLoaderType(type)
 
 # MinecraftModLoaderVersion Schema
@@ -918,7 +924,7 @@ installProfileJson 	string 	none
 """
 
 # MinecraftModLoaderVersion Class
-class MinecraftModLoaderVersion(object):
+class MinecraftModLoaderVersion(Base):
     def __init__(self, id: int, gameVersionId: int, minecraftGameVersionId: int, forgeVersion: str, name: str, type: ModLoaderType, downloadUrl: str, filename: str, installMethod: ModLoaderInstallMethod, latest: bool, recommended: bool, approved: bool, dateModified: datetime, mavenVersionString: str, versionJson: str, librariesInstallLocation: str, minecraftVersion: str, additionalFilesJson: str, modLoaderGameVersionId: int, modLoaderGameVersionTypeId: int, modLoaderGameVersionStatus: GameVersionStatus, modLoaderGameVersionTypeStatus: GameVersionTypeStatus, mcGameVersionId: int, mcGameVersionTypeId: int, mcGameVersionStatus: GameVersionStatus, mcGameVersionTypeStatus: GameVersionTypeStatus, installProfileJson: str):
         self.id: int = int(id)
         self.gameVersionId: int = int(gameVersionId)
@@ -932,7 +938,7 @@ class MinecraftModLoaderVersion(object):
         self.latest: bool = bool(latest)
         self.recommended: bool = bool(recommended)
         self.approved: bool = bool(approved)
-        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%XZ") if isinstance(dateModified, str) else dateModified
+        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateModified, str) else dateModified
         self.mavenVersionString: str = str(mavenVersionString)
         self.versionJson: str = str(versionJson)
         self.librariesInstallLocation: str = str(librariesInstallLocation)
@@ -980,7 +986,7 @@ thumbsUpCount 	integer(int32) 	The mod's thumbs up count
 """
 
 # Mod Class
-class Mod(object):
+class Mod(Base):
     def __init__(self, id: int, gameId: int, name: str, slug: str, links: ModLinks, summary: str, status: ModStatus, downloadCount: int, isFeatured: bool, primaryCategoryId: int, categories: list[Category], authors: list[ModAuthor], logo: ModAsset, screenshots: list[ModAsset], mainFileId: int, latestFiles: list[File], latestFilesIndexes: list[FileIndex], dateCreated: datetime, dateModified: datetime, dateReleased: datetime, gamePopularityRank: int, isAvailable: bool, thumbsUpCount: int, classId: int|None = None, allowModDistribution: bool|None = None):
         self.id: int = int(id)
         self.gameId: int = int(gameId)
@@ -1000,9 +1006,9 @@ class Mod(object):
         self.mainFileId: int = int(mainFileId)
         self.latestFiles: list[File] = list(map(lambda i: File(**i) if isinstance(i, dict) else i, latestFiles))
         self.latestFilesIndexes: list[FileIndex] = list(map(lambda i: FileIndex(**i) if isinstance(i, dict) else i, latestFilesIndexes))
-        self.dateCreated: datetime = datetime.strptime(dateCreated, "%Y-%m-%dT%XZ") if isinstance(dateCreated, str) else dateCreated
-        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%XZ") if isinstance(dateModified, str) else dateModified
-        self.dateReleased: datetime = datetime.strptime(dateReleased, "%Y-%m-%dT%XZ") if isinstance(dateReleased, str) else dateReleased
+        self.dateCreated: datetime = datetime.strptime(dateCreated, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateCreated, str) else dateCreated
+        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateModified, str) else dateModified
+        self.dateReleased: datetime = datetime.strptime(dateReleased, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateReleased, str) else dateReleased
         self.allowModDistribution: bool|None = bool(allowModDistribution) if allowModDistribution is not None else None
         self.gamePopularityRank: int = int(gamePopularityRank)
         self.isAvailable: bool = bool(isAvailable)
@@ -1021,7 +1027,7 @@ url 	string 	none
 """
 
 # ModAsset Class
-class ModAsset(object):
+class ModAsset(Base):
     def __init__(self, id: int, modId: int, title: str, description: str, thumbnailUrl: str, url: str):
         self.id: int = int(id)
         self.modId: int = int(modId)
@@ -1040,7 +1046,7 @@ url 	string 	none
 """
 
 # ModAuthor Class
-class ModAuthor(object):
+class ModAuthor(Base):
     def __init__(self, id: int, name: str, url: str):
         self.id: int = int(id)
         self.name: str = str(name)
@@ -1057,7 +1063,7 @@ sourceUrl 	string 	none
 """
 
 # ModLinks Class
-class ModLinks(object):
+class ModLinks(Base):
     def __init__(self, websiteUrl: str, wikiUrl: str, issuesUrl: str, sourceUrl: str):
         self.websiteUrl: str = str(websiteUrl)
         self.wikiUrl: str = str(wikiUrl)
@@ -1188,7 +1194,7 @@ totalCount 	integer(int64) 	The total number of items available by the request
 """
 
 # Pagination Class
-class Pagination(object):
+class Pagination(Base):
     def __init__(self, index: int, pageSize: int, resultCount: int, totalCount: int):
         self.index: int = int(index)
         self.pageSize: int = int(pageSize)
@@ -1204,7 +1210,7 @@ pagination 	Pagination 	The response pagination information
 """
 
 # SearchModsResponse Class
-class SearchModsResponse(object):
+class SearchModsResponse(Base):
     def __init__(self, data: list[Mod], pagination: Pagination):
         self.data: list[Mod] = list(map(lambda x: Mod(**x) if isinstance(x, dict) else x, data))
         self.pagination: Pagination = Pagination(**pagination) if isinstance(pagination, dict) else pagination
@@ -1221,7 +1227,7 @@ gameVersionTypeId 	integer(int32)¦null 	Game version type id
 """
 
 # SortableGameVersion Class
-class SortableGameVersion(object):
+class SortableGameVersion(Base):
     def __init__(self, gameVersionName: str, gameVersionPadded: str, gameVersion: str, gameVersionReleaseDate: str, gameVersionTypeId: int|None = None):
         self.gameVersionName: str = str(gameVersionName)
         self.gameVersionPadded: str = str(gameVersionPadded)
@@ -1243,7 +1249,7 @@ data 	string 	The response data
 """
 
 # StringResponse Class
-class StringResponse(object):
+class StringResponse(Base):
     def __init__(self, data: str):
         self.data: str = str(data)
 
