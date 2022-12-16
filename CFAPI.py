@@ -1,5 +1,7 @@
+from datetime import datetime
 import requests
 import sys
+import SchemaClasses as sc
 
 
 class CFAPI(object):
@@ -12,11 +14,14 @@ class CFAPI(object):
         }
 
     def query_builder(self, func, *params):
+        print(type(func))
+        print(func)
+        assert type(func) == type(self.get_games), "func must be a function"
         values = dict(
             zip(func.__code__.co_varnames[:func.__code__.co_argcount][1:], params))
-        return "?" + "&".join([f"{k}={v}" for k, v in values.items()])
+        return "?" + "&".join([f"{k}={v}" for k, v in values.items() if v is not None])
 
-    def get_games(self, index: int = 0, pageSize: int = 50) -> dict:
+    def get_games(self, index: int|None = None, pageSize: int|None = None) -> dict|int:
         # region this init
         this = eval(f"self.{sys._getframe().f_code.co_name}")
         lvars = []
@@ -26,10 +31,12 @@ class CFAPI(object):
 
         url = self.base_url + "/v1/games" + self.query_builder(this, *lvars)
         response = requests.get(url, headers=self.headers)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return response.status_code
 
-        return response.json()
-
-    def get_game(self, gameID: int) -> dict:
+    def get_game(self, gameID: int) -> dict|int:
         # region this init
         this = eval(f"self.{sys._getframe().f_code.co_name}")
         lvars = []
@@ -39,9 +46,28 @@ class CFAPI(object):
 
         url = self.base_url + "/v1/game/" + str(gameID)
         response = requests.get(url, headers=self.headers)
-        return response.json()
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return response.status_code
 
-    def get_categories(self, gameID: int, class_id: int = "", classesOnly: bool = False) -> dict:
+    def get_versions(self, gameID: int) -> dict|int:
+        url = self.base_url + "/v1/game/" + str(gameID) + "/versions"
+        response = requests.get(url, headers=self.headers)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return response.status_code
+
+    def get_version_types(self, gameID: int) -> dict|int:
+        url = self.base_url + "/v1/game/" + str(gameID) + "/version-types"
+        response = requests.get(url, headers=self.headers)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return response.status_code
+
+    def get_categories(self, gameID: int, class_id: int|None = None, classesOnly: bool|None = None) -> dict|int:
         # region this init
         this = eval(f"self.{sys._getframe().f_code.co_name}")
         lvars = []
@@ -53,4 +79,9 @@ class CFAPI(object):
             self.query_builder(this, *lvars)
         response = requests.get(url, headers=self.headers)
 
-        return response.json()
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return response.status_code
+
+    #def search_mods(self, gameID: int, classID: int, categoryID: int, gameVersion: str, searchFilter: str, sortField: )
