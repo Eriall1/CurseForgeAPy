@@ -3,8 +3,6 @@
 
 
 from CFAPI import CFAPI
-
-import os
-from env import CF_API
+from internalTools.env import CF_API
 
 cf = CFAPI(CF_API)
