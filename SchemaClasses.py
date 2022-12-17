@@ -295,7 +295,7 @@ class FileIndex(Base):
         self.filename: str = str(filename)
         self.releaseType: FileReleaseType = FileReleaseType(releaseType)
         self.gameVersionTypeId: int | None = int(gameVersionTypeId) if gameVersionTypeId is not None else None
-        self.modLoader: ModLoaderType = ModLoaderType(modLoader) if modLoader is not None else ModLoaderType(-1)
+        self.modLoader: ModLoaderType = ModLoaderType(modLoader) if modLoader is not None else ModLoaderType.NoneFound
 
 # FileModule Schema
 """
@@ -477,7 +477,7 @@ class FingerprintsMatchesResult(Base):
         self.partialMatches: list[FingerprintMatch] = partialMatches
         self.partialMatchFingerprints: object = partialMatchFingerprints
         self.installedFingerprints: list[int] = list(map(int, installedFingerprints))
-        self.unmatchedFingerprints: list[int] = list(map(int, unmatchedFingerprints))
+        self.unmatchedFingerprints: list[int] = list(map(int, unmatchedFingerprints)) if unmatchedFingerprints else []
 
 # FolderFingerprint Schema
 """
@@ -907,13 +907,13 @@ type 	ModLoaderType 	0 = Any
 
 # MinecraftModLoaderIndex Class
 class MinecraftModLoaderIndex(Base):
-    def __init__(self, name: str, gameVersion: str, latest: bool, recommended: bool, dateModified: datetime, type: ModLoaderType):
+    def __init__(self, name: str, gameVersion: str, latest: bool, recommended: bool, dateModified: datetime, type: ModLoaderType|None = None):
         self.name: str = str(name)
         self.gameVersion: str = str(gameVersion)
         self.latest: bool = bool(latest)
         self.recommended: bool = bool(recommended)
         self.dateModified: datetime =  create_datetime(dateModified) if isinstance(dateModified, str) else dateModified
-        self.type: ModLoaderType = ModLoaderType(type)
+        self.type: ModLoaderType = ModLoaderType(type) if type is not None else ModLoaderType.NoneFound
 
 # MinecraftModLoaderVersion Schema
 """

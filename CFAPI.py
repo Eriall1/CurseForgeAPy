@@ -176,8 +176,7 @@ class CFAPI(object):
         else:
             return status
 
-    def get_featured_mods(self, body: schemas.GetFeaturedModsRequestBody) -> schemas.GetFeaturedModsResponse|schemas.ApiResponseCode:
-        
+    def get_featured_mods(self, body: schemas.GetFeaturedModsRequestBody) -> schemas.GetFeaturedModsResponse|schemas.ApiResponseCode:        
         # region init
         # endregion
         response = requests.post(self.base_url+'/v1/mods/featured', headers=self.headers, data=str(body))
@@ -189,3 +188,185 @@ class CFAPI(object):
         else:
             return status
 
+    def get_mod_description(self, modId: int) -> schemas.StringResponse|schemas.ApiResponseCode:
+        # region init
+        url = self.base_url + f"/v1/mods/{modId}/description"
+        # endregion
+
+        response = requests.get(url, headers=self.headers)
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.StringResponse(**response.json())
+        else:
+            return status
+    
+    def get_mod_file(self, modId: int, fileId: int) -> schemas.GetModFileResponse|schemas.ApiResponseCode:
+        # region init
+        url = self.base_url + f"/v1/mods/{modId}/files/{fileId}"
+        # endregion
+
+        response = requests.get(url, headers=self.headers)
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.GetModFileResponse(**response.json())
+        else:
+            return status
+    
+    def get_mod_files(self, modId: int, gameVersion: int|None = None, modLoaderType: schemas.ModLoaderType|None = None, gameVersionTypeId: int|None = None, index: int|None = None, pageSize: int|None = None) -> schemas.GetModFilesResponse|schemas.ApiResponseCode:
+        # region init
+        # region bounds checking
+        if index is not None:
+            if not 0 <= index <= 10000:
+                return schemas.ApiResponseCode.BadRequest
+        if pageSize is not None:
+            if not 0 <= pageSize <= 50:
+                return schemas.ApiResponseCode.BadRequest
+        if index is not None and pageSize is not None:
+            if not index + pageSize <= 10000:
+                return schemas.ApiResponseCode.BadRequest
+        # endregion
+        # region this init
+        this = eval(f"self.{sys._getframe().f_code.co_name}")
+        lvars = []
+        for i in this.__code__.co_varnames[:this.__code__.co_argcount][1:]:
+            lvars.append(locals()[i])
+        # endregion
+        url = self.base_url + f"/v1/mods/{modId}/files{self.__query_builder(this, *lvars)}"
+        # endregion
+
+        response = requests.get(url, headers=self.headers)
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.GetModFilesResponse(**response.json())
+        else:
+            return status
+
+    def get_files(self, body: schemas.GetModFilesRequestBody) -> schemas.GetFilesResponse|schemas.ApiResponseCode:
+        # region init
+        # endregion
+        response = requests.post(self.base_url+'/v1/mods/files', headers=self.headers, data=str(body))
+        
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.GetFilesResponse(**response.json())
+        else:
+            return status
+
+    def get_mod_file_changelog(self, modId: int, fileId: int) -> schemas.StringResponse|schemas.ApiResponseCode:
+        # region init
+        url = self.base_url + f"/v1/mods/{modId}/files/{fileId}/changelog"
+        # endregion
+
+        response = requests.get(url, headers=self.headers)
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.StringResponse(**response.json())
+        else:
+            return status
+
+    def get_mod_file_download_url(self, modId: int, fileId: int) -> schemas.StringResponse|schemas.ApiResponseCode:
+        # region init
+        url = self.base_url + f"/v1/mods/{modId}/files/{fileId}/download-url"
+        # endregion
+
+        response = requests.get(url, headers=self.headers)
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.StringResponse(**response.json())
+        else:
+            return status
+
+    def get_fingerprints_matches(self, body: schemas.GetFingerprintMatchesRequestBody) -> schemas.GetFingerprintMatchesResponse|schemas.ApiResponseCode:
+        # region init
+        # endregion
+        response = requests.post(self.base_url+'/v1/fingerprints/', headers=self.headers, data=str(body))
+        
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            print(response.json())
+            return schemas.GetFingerprintMatchesResponse(**response.json())
+        else:
+            return status
+
+    def get_fingerprints_fuzzy_matches(self, body: schemas.GetFuzzyMatchesRequestBody) -> schemas.GetFingerprintsFuzzyMatchesResponse|schemas.ApiResponseCode:
+        # region init
+        # endregion
+        response = requests.post(self.base_url+'/v1/fingerprints/fuzzy', headers=self.headers, data=str(body))
+        
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.GetFingerprintsFuzzyMatchesResponse(**response.json())
+        else:
+            return status
+
+    def get_minecraft_versions(self, sortDescending: bool|None = None) -> schemas.ApiResponseOfListOfMinecraftGameVersion|schemas.ApiResponseCode:
+        # region init
+        # region this init
+        this = eval(f"self.{sys._getframe().f_code.co_name}")
+        lvars = []
+        for i in this.__code__.co_varnames[:this.__code__.co_argcount][1:]:
+            lvars.append(locals()[i])
+        # endregion
+        url = self.base_url + f"/v1/minecraft/version{self.__query_builder(this, *lvars)}"
+        # endregion
+
+        response = requests.get(url, headers=self.headers)
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.ApiResponseOfListOfMinecraftGameVersion(**response.json())
+        else:
+            return status
+    
+    def get_specific_minecraft_version(self, version: str) -> schemas.ApiResponseOfMinecraftGameVersion|schemas.ApiResponseCode:
+        # region init
+        url = self.base_url + f"/v1/minecraft/version/{version}"
+        # endregion
+
+        response = requests.get(url, headers=self.headers)
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.ApiResponseOfMinecraftGameVersion(**response.json())
+        else:
+            return status
+
+    def get_minecraft_modloaders(self, version: str|None = None, includeAll: bool|None = None) -> schemas.ApiResponseOfListOfMinecraftModLoaderIndex | schemas.ApiResponseCode:
+        # region init
+        # region this init
+        this = eval(f"self.{sys._getframe().f_code.co_name}")
+        lvars = []
+        for i in this.__code__.co_varnames[:this.__code__.co_argcount][1:]:
+            lvars.append(locals()[i])
+        # endregion
+        url = self.base_url + f"/v1/minecraft/modloader{self.__query_builder(this, *lvars)}"
+        # endregion
+
+        response = requests.get(url, headers=self.headers)
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.ApiResponseOfListOfMinecraftModLoaderIndex(**response.json())
+        else:
+            return status
+    
+    def get_specific_minecraft_modloader(self, modLoaderName: str) -> schemas.ApiResponseOfMinecraftModLoaderVersion|schemas.ApiResponseCode:
+        # region init
+        url = self.base_url + f"/v1/minecraft/modloader/{modLoaderName}"
+        # endregion
+
+        response = requests.get(url, headers=self.headers)
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.ApiResponseOfMinecraftModLoaderVersion(**response.json())
+        else:
+            return status
