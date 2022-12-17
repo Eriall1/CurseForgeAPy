@@ -3,6 +3,32 @@ import enum
 from datetime import datetime
 
 
+#region Helpers
+def create_datetime(date_string: str) -> datetime:
+    # Find the index of "T"
+    t_index = date_string.index("T")
+
+    # Slice the string into its date and time parts
+    date_part = date_string[:t_index]
+    time_part = date_string[t_index+1:]
+
+    # Split the date and time parts into their individual components
+    year, month, day = date_part.split("-")
+    hour, minute, second = time_part.split(":")
+    second = second[0:2]
+
+    # Parse the microseconds part if it is present
+    if "." in time_part:
+        dot_index = time_part.index(".")
+        microseconds_part = time_part[dot_index+1:-1]
+        date = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second), int(microseconds_part))
+    else:
+        date = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
+
+    return date
+
+#endregion
+
 #region Schemas
 
 # Base Class
@@ -83,7 +109,7 @@ class Category(Base):
         self.slug: str = str(slug)
         self.url: str = str(url)
         self.iconUrl: str = str(iconUrl)
-        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateModified, str) else dateModified
+        self.dateModified: datetime = create_datetime(dateModified) if isinstance(dateModified, str) else dateModified
         self.isClass: bool | None = bool(isClass) if isClass is not None else None
         self.classId: int | None = int(classId) if classId is not None else None
         self.parentCategoryId: int | None = int(parentCategoryId) if parentCategoryId is not None else None
@@ -270,7 +296,7 @@ class FileIndex(Base):
         self.filename: str = str(filename)
         self.releaseType: FileReleaseType = FileReleaseType(releaseType)
         self.gameVersionTypeId: int | None = int(gameVersionTypeId) if gameVersionTypeId is not None else None
-        self.modLoader: ModLoaderType = ModLoaderType(modLoader)
+        self.modLoader: ModLoaderType = ModLoaderType(modLoader) if modLoader is not None else ModLoaderType(-1)
 
 # FileModule Schema
 """
@@ -493,7 +519,7 @@ class Game(Base):
         self.id: int = int(id)
         self.name: str = str(name)
         self.slug: str = str(slug)
-        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateModified, str) else dateModified
+        self.dateModified: datetime = create_datetime(dateModified) if isinstance(dateModified, str) else dateModified
         self.assets: GameAssets = GameAssets(**assets) if isinstance(assets, dict) else assets
         self.status: CoreStatus = CoreStatus(status)
         self.apiStatus: CoreApiStatus = CoreApiStatus(apiStatus)
@@ -845,7 +871,7 @@ class MinecraftGameVersion(Base):
         self.jarDownloadUrl: str = str(jarDownloadUrl)
         self.jsonDownloadUrl: str = str(jsonDownloadUrl)
         self.approved: bool = bool(approved)
-        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateModified, str) else dateModified
+        self.dateModified: datetime = create_datetime(dateModified) if isinstance(dateModified, str) else dateModified
         self.gameVersionTypeId: int = int(gameVersionTypeId)
         self.gameVersionStatus: GameVersionStatus = GameVersionStatus(gameVersionStatus) 
         self.gameVersionTypeStatus: GameVersionTypeStatus = GameVersionTypeStatus(gameVersionTypeStatus)
@@ -874,7 +900,7 @@ class MinecraftModLoaderIndex(Base):
         self.gameVersion: str = str(gameVersion)
         self.latest: bool = bool(latest)
         self.recommended: bool = bool(recommended)
-        self.dateModified: datetime =  datetime.strptime(dateModified, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateModified, str) else dateModified
+        self.dateModified: datetime =  create_datetime(dateModified) if isinstance(dateModified, str) else dateModified
         self.type: ModLoaderType = ModLoaderType(type)
 
 # MinecraftModLoaderVersion Schema
@@ -938,7 +964,7 @@ class MinecraftModLoaderVersion(Base):
         self.latest: bool = bool(latest)
         self.recommended: bool = bool(recommended)
         self.approved: bool = bool(approved)
-        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateModified, str) else dateModified
+        self.dateModified: datetime = create_datetime(dateModified) if isinstance(dateModified, str) else dateModified
         self.mavenVersionString: str = str(mavenVersionString)
         self.versionJson: str = str(versionJson)
         self.librariesInstallLocation: str = str(librariesInstallLocation)
@@ -1006,9 +1032,9 @@ class Mod(Base):
         self.mainFileId: int = int(mainFileId)
         self.latestFiles: list[File] = list(map(lambda i: File(**i) if isinstance(i, dict) else i, latestFiles))
         self.latestFilesIndexes: list[FileIndex] = list(map(lambda i: FileIndex(**i) if isinstance(i, dict) else i, latestFilesIndexes))
-        self.dateCreated: datetime = datetime.strptime(dateCreated, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateCreated, str) else dateCreated
-        self.dateModified: datetime = datetime.strptime(dateModified, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateModified, str) else dateModified
-        self.dateReleased: datetime = datetime.strptime(dateReleased, "%Y-%m-%dT%H:%M:%S.%fZ") if isinstance(dateReleased, str) else dateReleased
+        self.dateCreated: datetime = create_datetime(dateCreated) if isinstance(dateCreated, str) else dateCreated
+        self.dateModified: datetime = create_datetime(dateModified) if isinstance(dateModified, str) else dateModified
+        self.dateReleased: datetime = create_datetime(dateReleased) if isinstance(dateReleased, str) else dateReleased
         self.allowModDistribution: bool|None = bool(allowModDistribution) if allowModDistribution is not None else None
         self.gamePopularityRank: int = int(gamePopularityRank)
         self.isAvailable: bool = bool(isAvailable)
@@ -1106,6 +1132,7 @@ Possible enum values:
 
 # ModLoaderType Enum
 class ModLoaderType(enum.Enum):
+    NoneFound = -1
     Any = 0
     Forge = 1
     Cauldron = 2
