@@ -8,6 +8,7 @@ class CFAPI(object):
         self.api_key: str = api_key
         self.base_url: str = "https://api.curseforge.com"
         self.headers: dict[str, str] = {
+            'Content-Type': 'application/json',
             "Accept": "application/json",
             "x-api-key": self.api_key
         }
@@ -117,7 +118,6 @@ class CFAPI(object):
         else:
             return status
 
-    # function built around constructing a schemas.SearchModsResponse object
     def search_mods(self, gameId: int, classId: int|None = None, categoryId: int|None = None, gameVersion: str|None = None, searchFilter: str|None = None, sortField: schemas.ModSearchSortField|None = None, sortOrder: schemas.SortOrder|None = None, modLoaderType: schemas.ModLoaderType|None = None, gameVersionTypeId: int|None = None, slug: str|None = None, index: int|None = None, pageSize: int|None = None) -> schemas.SearchModsResponse|schemas.ApiResponseCode:
         # region init
         # region bounds checking
@@ -138,7 +138,6 @@ class CFAPI(object):
             lvars.append(locals()[i])
         # endregion
         url = self.base_url + f"/v1/mods/search{self.__query_builder(this, *lvars)}"
-        print(url)
         # endregion
 
         response = requests.get(url, headers=self.headers)
@@ -148,3 +147,45 @@ class CFAPI(object):
             return schemas.SearchModsResponse(**response.json())
         else:
             return status
+
+    def get_mod(self, modId: int) -> schemas.GetModResponse|schemas.ApiResponseCode:
+        # region init
+        url = self.base_url + f"/v1/mods/{modId}"
+        # endregion
+
+        response = requests.get(url, headers=self.headers)
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.GetModResponse(**response.json())
+        else:
+            return status
+
+    def get_mods(self, modIds: schemas.GetModsByIdsListRequestBody|list[int]) -> schemas.GetModsResponse|schemas.ApiResponseCode:
+        # region init
+        url = self.base_url + f"/v1/mods"
+        # endregion
+
+        if isinstance(modIds, list):
+            modIds = schemas.GetModsByIdsListRequestBody(modIds)
+        response = requests.post(url, headers=self.headers, data=str(modIds))
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.GetModsResponse(**response.json())
+        else:
+            return status
+
+    def get_featured_mods(self, body: schemas.GetFeaturedModsRequestBody) -> schemas.GetFeaturedModsResponse|schemas.ApiResponseCode:
+        
+        # region init
+        # endregion
+        response = requests.post(self.base_url+'/v1/mods/featured', headers=self.headers, data=str(body))
+        
+        status = schemas.ApiResponseCode(response.status_code)
+
+        if status == schemas.ApiResponseCode.OK:
+            return schemas.GetFeaturedModsResponse(**response.json())
+        else:
+            return status
+

@@ -1,6 +1,7 @@
 from __future__ import annotations
 import enum
 from datetime import datetime
+import jsonpickle
 
 
 #region Helpers
@@ -34,7 +35,8 @@ def create_datetime(date_string: str) -> datetime:
 # Base Class
 class Base(object):
     def __str__(self):
-        return self.__class__.__name__
+        return jsonpickle.dumps(self.__dict__)
+        
 
 # ApiResponseOfListOfMinecraftGameVersion Schema
 """
@@ -223,7 +225,7 @@ class File(Base):
         self.downloadUrl: str = str(downloadUrl)
         self.gameVersions: list[str] = list(map(lambda x: str(x), gameVersions))
         self.sortableGameVersions: list[SortableGameVersion] = list(map(lambda x: SortableGameVersion(**x) if isinstance(x, dict) else x, sortableGameVersions))
-        self.dependencies: list[FileDependency] = list(map(lambda x: FileDependency(x), dependencies))
+        self.dependencies: list[FileDependency] = list(map(lambda x: FileDependency(**x) if isinstance(x, dict) else x, dependencies))
         self.exposeAsAlternative: bool | None = bool(exposeAsAlternative) if exposeAsAlternative is not None else None
         self.parentProjectFileId: int | None = int(parentProjectFileId) if parentProjectFileId is not None else None
         self.alternateFileId: int | None = int(alternateFileId) if alternateFileId is not None else None
@@ -231,7 +233,7 @@ class File(Base):
         self.serverPackFileId: int | None = int(serverPackFileId) if serverPackFileId is not None else None
         self.fileFingerprint: int = int(fileFingerprint)
         self.modules: list[FileModule] = list(map(lambda x: FileModule(**x) if isinstance(x, dict) else x, modules))
-
+        
 # FileDependency Schema
 """
 Properties
@@ -245,14 +247,11 @@ relationType 	FileRelationType 	1 = EmbeddedLibrary
 6 = Include
 """
 
-# FileDependency Enum
-class FileDependency(enum.Enum):
-    EmbeddedLibrary = 1
-    OptionalDependency = 2
-    RequiredDependency = 3
-    Tool = 4
-    Incompatible = 5
-    Include = 6
+# FileDependency Class
+class FileDependency(Base):
+    def __init__(self, modId: int, relationType: FileRelationType):
+        self.modId: int = int(modId)
+        self.relationType: FileRelationType = FileRelationType(relationType)
 
 # FileHash Schema
 """
@@ -329,7 +328,7 @@ Possible enum values:
 6=Include
 """
 
-# FileRelationType Class
+# FileRelationType Enum
 class FileRelationType(enum.Enum):
     EmbeddedLibrary = 1
     OptionalDependency = 2
@@ -774,10 +773,10 @@ gameVersionTypeId 	integer(int32)¦null 	none
 
 # GetFeaturedModsRequestBody Class
 class GetFeaturedModsRequestBody(Base):
-    def __init__(self, gameId: int, excludedModIds: list[int], gameVersionTypeId: int):
+    def __init__(self, gameId: int, excludedModIds: list[int], gameVersionTypeId: int|None = None):
         self.gameId: int = int(gameId)
         self.excludedModIds: list[int] = list(map(int, excludedModIds))
-        self.gameVersionTypeId: int = int(gameVersionTypeId)
+        self.gameVersionTypeId: int|None = int(gameVersionTypeId) if gameVersionTypeId is not None else None
 
 # GetFingerprintMatchesRequestBody Schema
 """
@@ -828,6 +827,19 @@ modIds 	[integer] 	none
 class GetModsByIdsListRequestBody(Base):
     def __init__(self, modIds: list[int]):
         self.modIds: list[int] = list(map(int, modIds))
+
+    def __iter__(self):
+        yield from {
+            "modIds": self.modIds
+        }.items()
+    def __repr__(self):
+        return self.__str__()
+    """
+    def __dict__(self):
+        return {
+            'modIds': self.modIds
+        }
+    """
 
 # HashAlgo Schema
 """
