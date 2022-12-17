@@ -1,7 +1,7 @@
 from __future__ import annotations
 import enum
 from datetime import datetime
-import jsonpickle
+import json
 
 
 #region Helpers
@@ -35,7 +35,7 @@ def create_datetime(date_string: str) -> datetime:
 # Base Class
 class Base(object):
     def __str__(self):
-        return jsonpickle.dumps(self.__dict__)
+        return json.dumps(self.__dict__)
         
 
 # ApiResponseOfListOfMinecraftGameVersion Schema
