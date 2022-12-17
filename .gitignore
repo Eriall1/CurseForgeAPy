@@ -351,3 +351,4 @@ MigrationBackup/
 
 # Internal Dev Tools
 internalTools/
+.vscode/
