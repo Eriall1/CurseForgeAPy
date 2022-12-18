@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: CurseforgeAPy
+Version: 1.0.2
+Summary: A wrapper for the Eternal (CurseForge) API
+Author-email: James O'Grady <jamesmoose2854@gmail.com>
+Project-URL: Homepage, https://github.com/James2854/CurseforgeAPy
+Project-URL: Bug Tracker, https://github.com/James2854/CurseforgeAPy/issues
+Project-URL: Documentation, https://docs.curseforge.com/
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+
+# CurseForgeAPy
+
+CurseForgeAPy is a wrapper written in python for the Eternal (CurseForge) API. It covers all endpoints defined at "https://docs.curseforge.com/" and returns layered objects of the data.

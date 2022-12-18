@@ -1,7 +1,7 @@
 from datetime import datetime
 import requests
 import sys
-import SchemaClasses as schemas
+import CurseForgeAPy.SchemaClasses as schemas
 
 class CFAPI(object):
     def __init__(self, api_key) -> None:
@@ -290,7 +290,6 @@ class CFAPI(object):
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
-            print(response.json())
             return schemas.GetFingerprintMatchesResponse(**response.json())
         else:
             return status

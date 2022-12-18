@@ -351,3 +351,5 @@ MigrationBackup/
 
 # Internal Dev Tools
 internalTools/
+main.py
+.vscode/

@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+src/CurseForgeAPy/CFAPI.py
+src/CurseForgeAPy/SchemaClasses.py
+src/CurseForgeAPy/__init__.py
+src/CurseforgeAPy.egg-info/PKG-INFO
+src/CurseforgeAPy.egg-info/SOURCES.txt
+src/CurseforgeAPy.egg-info/dependency_links.txt
+src/CurseforgeAPy.egg-info/requires.txt
+src/CurseforgeAPy.egg-info/top_level.txt
