@@ -1,6 +1,6 @@
 [project]
 name = "CurseforgeAPy"
-version = "1.0.2"
+version = "1.0.3"
 authors = [
   { name="James O'Grady", email="jamesmoose2854@gmail.com" },
 ]
