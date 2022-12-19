@@ -1,4 +1,4 @@
-from .CFAPI import CFAPI
+from .CFAPI import CurseForgeAPI
 from .SchemaClasses import (
     ApiResponseCode,
     ApiResponseOfListOfMinecraftGameVersion,

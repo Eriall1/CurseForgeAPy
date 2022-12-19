@@ -3,7 +3,7 @@ import requests
 import sys
 import CurseForgeAPy.SchemaClasses as schemas
 
-class CFAPI(object):
+class CurseForgeAPI(object):
     def __init__(self, api_key) -> None:
         self.api_key: str = api_key
         self.base_url: str = "https://api.curseforge.com"
@@ -14,16 +14,20 @@ class CFAPI(object):
         }
 
     def __query_builder(self, func, *params):
-        assert type(func) == type(self.get_games), "func must be a function"
+        assert type(func) == type(self.getGames), "func must be a function"
         values = dict(
             zip(func.__code__.co_varnames[:func.__code__.co_argcount][1:], params))
         return "?" + "&".join([f"{k}={v}" for k, v in values.items() if v is not None])
 
-    def get_games(self, index: int|None = None, pageSize: int|None = None) -> schemas.GetGamesResponse|schemas.ApiResponseCode:
+    def getGames(self, index: int|None = None, pageSize: int|None = None) -> schemas.GetGamesResponse|schemas.ApiResponseCode:
         """
+        get all games from CurseForge
+
         index: A zero based index of the first item to include in the response, the limit is: (index + pageSize <= 10,000).
 
         pageSize: The number of items to include in the response, the default/maximum value is 50.
+        
+        returns GetGamesResponse
         """
         # region init
         # region bounds checking
@@ -54,7 +58,15 @@ class CFAPI(object):
         else:
             return status
 
-    def get_game(self, gameId: int) -> schemas.GetGameResponse|schemas.ApiResponseCode:
+    def getGame(self, gameId: int) -> schemas.GetGameResponse|schemas.ApiResponseCode:
+        """
+        Get a specific game from CurseForge
+
+        gameId: The id of the game to get
+
+        returns GetGameResponse
+        """
+
         # region init
         # region this init
         this = eval(f"self.{sys._getframe().f_code.co_name}")
@@ -73,7 +85,15 @@ class CFAPI(object):
         else:
             return status
 
-    def get_versions(self, gameId: int) -> schemas.GetVersionsResponse|schemas.ApiResponseCode:
+    def getVersions(self, gameId: int) -> schemas.GetVersionsResponse|schemas.ApiResponseCode:
+        """
+        Get all versions for a specific game
+
+        gameId: The id of the game to get versions for
+
+        returns GetVersionsResponse
+        """
+        
         # region init
         url = self.base_url + f"/v1/games/{gameId}/versions"
         # endregion
@@ -86,7 +106,15 @@ class CFAPI(object):
         else:
             return status
 
-    def get_version_types(self, gameId: int) -> schemas.GetVersionTypesResponse|schemas.ApiResponseCode:
+    def getVersionTypes(self, gameId: int) -> schemas.GetVersionTypesResponse|schemas.ApiResponseCode:
+        """
+        Get all version types for a specific game
+
+        gameId: The id of the game to get version types for
+
+        returns GetVersionTypesResponse
+        """
+
         # region init
         url = self.base_url + f"/v1/games/{gameId}/version-types"
         # endregion
@@ -99,7 +127,17 @@ class CFAPI(object):
         else:
             return status
 
-    def get_categories(self, gameId: int, class_id: int|None = None, classesOnly: bool|None = None) -> schemas.GetCategoriesResponse|schemas.ApiResponseCode:
+    def getCategories(self, gameId: int, classId: int|None = None, classesOnly: bool|None = None) -> schemas.GetCategoriesResponse|schemas.ApiResponseCode:
+        """
+        Get all categories for a specific game
+
+        gameId: The id of the game to get categories for
+        classId: A unique class ID
+        classesOnly: A flag used with gameId to return only classes
+
+        returns GetCategoriesResponse
+        """
+
         # region init
         # region this init
         this = eval(f"self.{sys._getframe().f_code.co_name}")
@@ -118,7 +156,30 @@ class CFAPI(object):
         else:
             return status
 
-    def search_mods(self, gameId: int, classId: int|None = None, categoryId: int|None = None, gameVersion: str|None = None, searchFilter: str|None = None, sortField: schemas.ModSearchSortField|None = None, sortOrder: schemas.SortOrder|None = None, modLoaderType: schemas.ModLoaderType|None = None, gameVersionTypeId: int|None = None, slug: str|None = None, index: int|None = None, pageSize: int|None = None) -> schemas.SearchModsResponse|schemas.ApiResponseCode:
+    def searchMods(self, gameId: int, classId: int|None = None, categoryId: int|None = None, gameVersion: str|None = None, searchFilter: str|None = None, sortField: schemas.ModSearchSortField|None = None, sortOrder: schemas.SortOrder|None = None, modLoaderType: schemas.ModLoaderType|None = None, gameVersionTypeId: int|None = None, slug: str|None = None, index: int|None = None, pageSize: int|None = None) -> schemas.SearchModsResponse|schemas.ApiResponseCode:
+        """
+        searches for mods using the given parameters
+
+        gameId: The id of the game to search mods for
+
+        Optional:
+        
+        classId: A unique class ID
+        categoryId: A unique category ID
+        gameVersion: A game version
+        searchFilter: A search filter
+        sortField: A sort field
+        sortOrder: A sort order
+        modLoaderType: A mod loader type
+        gameVersionTypeId: A game version type ID
+        slug: A slug
+        index: The index of the first result to return
+        pageSize: The number of results to return
+
+        returns SearchModsResponse
+
+        """
+        
         # region init
         # region bounds checking
         if index is not None:
@@ -148,7 +209,7 @@ class CFAPI(object):
         else:
             return status
 
-    def get_mod(self, modId: int) -> schemas.GetModResponse|schemas.ApiResponseCode:
+    def getMod(self, modId: int) -> schemas.GetModResponse|schemas.ApiResponseCode:
         # region init
         url = self.base_url + f"/v1/mods/{modId}"
         # endregion
@@ -161,7 +222,7 @@ class CFAPI(object):
         else:
             return status
 
-    def get_mods(self, modIds: schemas.GetModsByIdsListRequestBody|list[int]) -> schemas.GetModsResponse|schemas.ApiResponseCode:
+    def getMods(self, modIds: schemas.GetModsByIdsListRequestBody|list[int]) -> schemas.GetModsResponse|schemas.ApiResponseCode:
         # region init
         url = self.base_url + f"/v1/mods"
         # endregion
@@ -176,7 +237,7 @@ class CFAPI(object):
         else:
             return status
 
-    def get_featured_mods(self, body: schemas.GetFeaturedModsRequestBody) -> schemas.GetFeaturedModsResponse|schemas.ApiResponseCode:        
+    def getFeatured_mods(self, body: schemas.GetFeaturedModsRequestBody) -> schemas.GetFeaturedModsResponse|schemas.ApiResponseCode:        
         # region init
         # endregion
         response = requests.post(self.base_url+'/v1/mods/featured', headers=self.headers, data=str(body))
@@ -188,7 +249,7 @@ class CFAPI(object):
         else:
             return status
 
-    def get_mod_description(self, modId: int) -> schemas.StringResponse|schemas.ApiResponseCode:
+    def getModDescription(self, modId: int) -> schemas.StringResponse|schemas.ApiResponseCode:
         # region init
         url = self.base_url + f"/v1/mods/{modId}/description"
         # endregion
@@ -201,7 +262,7 @@ class CFAPI(object):
         else:
             return status
     
-    def get_mod_file(self, modId: int, fileId: int) -> schemas.GetModFileResponse|schemas.ApiResponseCode:
+    def getModFile(self, modId: int, fileId: int) -> schemas.GetModFileResponse|schemas.ApiResponseCode:
         # region init
         url = self.base_url + f"/v1/mods/{modId}/files/{fileId}"
         # endregion
@@ -214,7 +275,7 @@ class CFAPI(object):
         else:
             return status
     
-    def get_mod_files(self, modId: int, gameVersion: int|None = None, modLoaderType: schemas.ModLoaderType|None = None, gameVersionTypeId: int|None = None, index: int|None = None, pageSize: int|None = None) -> schemas.GetModFilesResponse|schemas.ApiResponseCode:
+    def getModFiles(self, modId: int, gameVersion: int|None = None, modLoaderType: schemas.ModLoaderType|None = None, gameVersionTypeId: int|None = None, index: int|None = None, pageSize: int|None = None) -> schemas.GetModFilesResponse|schemas.ApiResponseCode:
         # region init
         # region bounds checking
         if index is not None:
@@ -244,7 +305,7 @@ class CFAPI(object):
         else:
             return status
 
-    def get_files(self, body: schemas.GetModFilesRequestBody) -> schemas.GetFilesResponse|schemas.ApiResponseCode:
+    def getFiles(self, body: schemas.GetModFilesRequestBody) -> schemas.GetFilesResponse|schemas.ApiResponseCode:
         # region init
         # endregion
         response = requests.post(self.base_url+'/v1/mods/files', headers=self.headers, data=str(body))
@@ -256,7 +317,7 @@ class CFAPI(object):
         else:
             return status
 
-    def get_mod_file_changelog(self, modId: int, fileId: int) -> schemas.StringResponse|schemas.ApiResponseCode:
+    def getModFileChangelog(self, modId: int, fileId: int) -> schemas.StringResponse|schemas.ApiResponseCode:
         # region init
         url = self.base_url + f"/v1/mods/{modId}/files/{fileId}/changelog"
         # endregion
@@ -269,7 +330,7 @@ class CFAPI(object):
         else:
             return status
 
-    def get_mod_file_download_url(self, modId: int, fileId: int) -> schemas.StringResponse|schemas.ApiResponseCode:
+    def getModFileDownloadUrl(self, modId: int, fileId: int) -> schemas.StringResponse|schemas.ApiResponseCode:
         # region init
         url = self.base_url + f"/v1/mods/{modId}/files/{fileId}/download-url"
         # endregion
@@ -282,7 +343,7 @@ class CFAPI(object):
         else:
             return status
 
-    def get_fingerprints_matches(self, body: schemas.GetFingerprintMatchesRequestBody) -> schemas.GetFingerprintMatchesResponse|schemas.ApiResponseCode:
+    def getFingerprintsMatches(self, body: schemas.GetFingerprintMatchesRequestBody) -> schemas.GetFingerprintMatchesResponse|schemas.ApiResponseCode:
         # region init
         # endregion
         response = requests.post(self.base_url+'/v1/fingerprints/', headers=self.headers, data=str(body))
@@ -294,7 +355,7 @@ class CFAPI(object):
         else:
             return status
 
-    def get_fingerprints_fuzzy_matches(self, body: schemas.GetFuzzyMatchesRequestBody) -> schemas.GetFingerprintsFuzzyMatchesResponse|schemas.ApiResponseCode:
+    def getFingerprintsFuzzyMatches(self, body: schemas.GetFuzzyMatchesRequestBody) -> schemas.GetFingerprintsFuzzyMatchesResponse|schemas.ApiResponseCode:
         # region init
         # endregion
         response = requests.post(self.base_url+'/v1/fingerprints/fuzzy', headers=self.headers, data=str(body))
@@ -306,7 +367,7 @@ class CFAPI(object):
         else:
             return status
 
-    def get_minecraft_versions(self, sortDescending: bool|None = None) -> schemas.ApiResponseOfListOfMinecraftGameVersion|schemas.ApiResponseCode:
+    def getMinecraftVersions(self, sortDescending: bool|None = None) -> schemas.ApiResponseOfListOfMinecraftGameVersion|schemas.ApiResponseCode:
         # region init
         # region this init
         this = eval(f"self.{sys._getframe().f_code.co_name}")
@@ -325,7 +386,7 @@ class CFAPI(object):
         else:
             return status
     
-    def get_specific_minecraft_version(self, version: str) -> schemas.ApiResponseOfMinecraftGameVersion|schemas.ApiResponseCode:
+    def getSpecificMinecraftVersion(self, version: str) -> schemas.ApiResponseOfMinecraftGameVersion|schemas.ApiResponseCode:
         # region init
         url = self.base_url + f"/v1/minecraft/version/{version}"
         # endregion
@@ -338,7 +399,7 @@ class CFAPI(object):
         else:
             return status
 
-    def get_minecraft_modloaders(self, version: str|None = None, includeAll: bool|None = None) -> schemas.ApiResponseOfListOfMinecraftModLoaderIndex | schemas.ApiResponseCode:
+    def getMinecraftModloaders(self, version: str|None = None, includeAll: bool|None = None) -> schemas.ApiResponseOfListOfMinecraftModLoaderIndex | schemas.ApiResponseCode:
         # region init
         # region this init
         this = eval(f"self.{sys._getframe().f_code.co_name}")
@@ -357,7 +418,7 @@ class CFAPI(object):
         else:
             return status
     
-    def get_specific_minecraft_modloader(self, modLoaderName: str) -> schemas.ApiResponseOfMinecraftModLoaderVersion|schemas.ApiResponseCode:
+    def getSpecificMinecraftModloader(self, modLoaderName: str) -> schemas.ApiResponseOfMinecraftModLoaderVersion|schemas.ApiResponseCode:
         # region init
         url = self.base_url + f"/v1/minecraft/modloader/{modLoaderName}"
         # endregion
