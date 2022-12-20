@@ -2,6 +2,7 @@ from datetime import datetime
 import requests
 import sys
 import CurseForgeAPy.SchemaClasses as schemas
+import enum
 
 class CurseForgeAPI(object):
     def __init__(self, api_key) -> None:
@@ -15,9 +16,14 @@ class CurseForgeAPI(object):
 
     def __query_builder(self, func, *params):
         assert type(func) == type(self.getGames), "func must be a function"
-        values = dict(
-            zip(func.__code__.co_varnames[:func.__code__.co_argcount][1:], params))
-        return "?" + "&".join([f"{k}={v}" for k, v in values.items() if v is not None])
+
+        values = {}
+        for i,v in enumerate(params):
+            if v is not None:
+                if isinstance(v, enum.Enum):
+                    v = v.value
+                values[func.__code__.co_varnames[:func.__code__.co_argcount][i+1]] = v
+        return "?" + "&".join([requests.utils.quote(f"{k}={v}", safe="=") for k, v in values.items()])
 
     def getGames(self, index: int|None = None, pageSize: int|None = None) -> schemas.GetGamesResponse|schemas.ApiResponseCode:
         """
@@ -201,6 +207,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/mods/search{self.__query_builder(this, *lvars)}"
         # endregion
 
+        print(url)
         response = requests.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 

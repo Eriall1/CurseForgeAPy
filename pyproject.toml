@@ -1,17 +1,23 @@
 [project]
-name = "CurseforgeAPy"
-version = "1.0.3"
+name = "CurseForgeAPy"
+version = "1.0.4"
 authors = [
   { name="James O'Grady", email="jamesmoose2854@gmail.com" },
 ]
 description = "A wrapper for the Eternal (CurseForge) API"
 readme = "README.md"
 requires-python = ">=3.7"
+license = "MIT"
+keywords = ["Minecraft", "Curseforge", "Eternal", "API", "Wrapper"]
 
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Games/Entertainment",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
 ]
 
 dependencies = [
@@ -20,7 +26,7 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/James2854/CurseforgeAPy"
+"Repository" = "https://github.com/James2854/CurseforgeAPy"
 "Bug Tracker" = "https://github.com/James2854/CurseforgeAPy/issues"
 "Documentation" = "https://docs.curseforge.com/"
 
