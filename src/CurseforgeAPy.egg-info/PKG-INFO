@@ -1,14 +1,19 @@
 Metadata-Version: 2.1
-Name: CurseforgeAPy
-Version: 1.0.3
+Name: CurseForgeAPy
+Version: 1.0.4
 Summary: A wrapper for the Eternal (CurseForge) API
 Author-email: James O'Grady <jamesmoose2854@gmail.com>
-Project-URL: Homepage, https://github.com/James2854/CurseforgeAPy
+Project-URL: Repository, https://github.com/James2854/CurseforgeAPy
 Project-URL: Bug Tracker, https://github.com/James2854/CurseforgeAPy/issues
 Project-URL: Documentation, https://docs.curseforge.com/
+Keywords: Minecraft,Curseforge,Eternal,API,Wrapper
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Games/Entertainment
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Typing :: Typed
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown
 License-File: LICENSE.md

@@ -7,7 +7,6 @@ authors = [
 description = "A wrapper for the Eternal (CurseForge) API"
 readme = "README.md"
 requires-python = ">=3.7"
-license = "MIT"
 keywords = ["Minecraft", "Curseforge", "Eternal", "API", "Wrapper"]
 
 classifiers = [

@@ -4,6 +4,11 @@ pyproject.toml
 src/CurseForgeAPy/CFAPI.py
 src/CurseForgeAPy/SchemaClasses.py
 src/CurseForgeAPy/__init__.py
+src/CurseForgeAPy.egg-info/PKG-INFO
+src/CurseForgeAPy.egg-info/SOURCES.txt
+src/CurseForgeAPy.egg-info/dependency_links.txt
+src/CurseForgeAPy.egg-info/requires.txt
+src/CurseForgeAPy.egg-info/top_level.txt
 src/CurseforgeAPy.egg-info/PKG-INFO
 src/CurseforgeAPy.egg-info/SOURCES.txt
 src/CurseforgeAPy.egg-info/dependency_links.txt
