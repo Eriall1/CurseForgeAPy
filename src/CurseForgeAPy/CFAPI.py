@@ -206,8 +206,7 @@ class CurseForgeAPI(object):
         # endregion
         url = self.base_url + f"/v1/mods/search{self.__query_builder(this, *lvars)}"
         # endregion
-
-        print(url)
+        
         response = requests.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
