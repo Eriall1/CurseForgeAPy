@@ -4,7 +4,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/James2854/CurseForgeAPy?style=for-the-badge)](https://github.com/James2854/CurseForgeAPy/stargazers)
 [![GitHub license](https://img.shields.io/github/license/James2854/CurseForgeAPy?style=for-the-badge)](https://github.com/James2854/CurseForgeAPy)
 
-CurseForgeAPy is a Python package that provides a wrapper for the CurseForge API / Eternal API. With CurseForgeAPy, you can easily access and interact with the API in your Python scripts and applications.
+CurseForgeAPy is a Python package that provides a wrapper for the CurseForge API / Eternal API. With CurseForgeAPy, you can easily access and interact with the API in your Python scripts and applications. Currently, the entire API has been wrapped and each data structure has been reconstructed into seperate classes, which can be found within SchemaClasses.py.
 
 ## Installation
 
@@ -122,6 +122,10 @@ minecraftModloaders = cf.getMinecraftModloaders()
 # get a specific minecraft modloader
 minecraftModloader = cf.getSpecificMinecraftModloader(0)
 ```
+
+## TODO
+- [ ] Implement the cache for requests
+- [ ] Implement a file download method
 
 ## Support
 
