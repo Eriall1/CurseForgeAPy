@@ -123,10 +123,6 @@ minecraftModloaders = cf.getMinecraftModloaders()
 minecraftModloader = cf.getSpecificMinecraftModloader(0)
 ```
 
-## TODO
-- [ ] Implement the cache for requests
-- [ ] Implement a file download method
-
 ## Support
 
 If you have any issues or questions while using CurseForgeAPy, please feel free to open an issue on the GitHub repository or contact us through our support channels.
