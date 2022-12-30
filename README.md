@@ -120,7 +120,40 @@ minecraftVersion = cf.getSpecificMinecraftVersion("1.16.5")
 minecraftModloaders = cf.getMinecraftModloaders()
 
 # get a specific minecraft modloader
-minecraftModloader = cf.getSpecificMinecraftModloader(0)
+minecraftModloader = cf.getSpecificMinecraftModloader("forge-1.16.5-36.1.0")
+```
+
+### Utilities
+``` Python
+# Within the CurseForgeAPy package, there is a utility class that has a couple helper functions, mainly downloading files related.
+# These functions shouldnt be called without a CurseForgeAPy client object, as they use the client to get the download url.
+
+from CurseForgeAPy import utils
+from CurseForgeAPy import schemaClasses as schemas
+
+# Each function take in a CurseForgeAPy client object, and a specific parameter, finishing with a file path to save the file to.
+cf = CFAPI('YOUR-API-KEY')
+
+# Download a file from a url
+utils.downloadFileFromURL(cf, "file-url", "file-path")
+
+# Download a specified file from id
+utils.downloadFileFromID(cf, 111111, "file-path")
+
+# Download a specified file from a mod id
+utils.downloadFileFromModID(cf, 111111, "file-path")
+
+# Download a specified file from a mod id and file id
+utils.downloadFileFromModIDAndFileID(cf, 111111, 222222, "file-path")
+
+# Download a specified file from a mod id and version, with optional release type (defaults to None which is any release type)
+# Can return an exception if the version is not found
+utils.downloadFileFromModIDVersion(cf, 111111, "1.16.5", "file-path", schemas.ReleaseType.Release)
+
+# Create a datetime
+# This is an internal function that is used to convert the CurseForge API's datetime format to a python datetime object
+# This is due to the API returning varying formats for the datetime, so this function uses string parsing to convert it to a datetime object
+utils.create_datetime("2021-01-01T00:00:00.000Z")
 ```
 
 ## Support

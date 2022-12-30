@@ -1,7 +1,7 @@
 from datetime import datetime
 from requests.utils import quote
 import sys
-import CurseForgeAPy.SchemaClasses as schemas
+import CurseForgeAPy.schemaClasses as schemas
 import enum
 import requests_cache as rqc
 

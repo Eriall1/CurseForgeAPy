@@ -1,6 +1,6 @@
 from .CFAPI import CurseForgeAPI
 
-from .Utils import (
+from .utils import (
     downloadFileFromID, 
     downloadFileFromModID, 
     downloadFileFromModIDVersion, 
@@ -8,7 +8,7 @@ from .Utils import (
     create_datetime,
 )
 
-from .SchemaClasses import (
+from .schemaClasses import (
     ApiResponseCode,
     ApiResponseOfListOfMinecraftGameVersion,
     ApiResponseOfListOfMinecraftModLoaderIndex,
