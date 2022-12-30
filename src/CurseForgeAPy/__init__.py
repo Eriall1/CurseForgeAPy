@@ -1,4 +1,13 @@
 from .CFAPI import CurseForgeAPI
+
+from .Utils import (
+    downloadFileFromID, 
+    downloadFileFromModID, 
+    downloadFileFromModIDVersion, 
+    downloadFileFromURL,
+    create_datetime,
+)
+
 from .SchemaClasses import (
     ApiResponseCode,
     ApiResponseOfListOfMinecraftGameVersion,

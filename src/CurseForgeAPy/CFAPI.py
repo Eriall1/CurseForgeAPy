@@ -1,8 +1,9 @@
 from datetime import datetime
-import requests
+from requests.utils import quote
 import sys
 import CurseForgeAPy.SchemaClasses as schemas
 import enum
+import requests_cache as rqc
 
 class CurseForgeAPI(object):
     def __init__(self, api_key) -> None:
@@ -23,7 +24,7 @@ class CurseForgeAPI(object):
                 if isinstance(v, enum.Enum):
                     v = v.value
                 values[func.__code__.co_varnames[:func.__code__.co_argcount][i+1]] = v
-        return "?" + "&".join([requests.utils.quote(f"{k}={v}", safe="=") for k, v in values.items()])
+        return "?" + "&".join([quote(f"{k}={v}", safe="=") for k, v in values.items()])
 
     def getGames(self, index: int|None = None, pageSize: int|None = None) -> schemas.GetGamesResponse|schemas.ApiResponseCode:
         """
@@ -56,7 +57,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/games{self.__query_builder(this, *lvars)}"
         # endregion
         
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -83,7 +84,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/games/{gameId}"
         # endregion
 
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -104,7 +105,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/games/{gameId}/versions"
         # endregion
 
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -125,7 +126,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/games/{gameId}/version-types"
         # endregion
         
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -154,7 +155,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/games/{gameId}/version-types"
         # endregion
         
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -207,7 +208,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/mods/search{self.__query_builder(this, *lvars)}"
         # endregion
         
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -220,7 +221,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/mods/{modId}"
         # endregion
 
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -235,7 +236,7 @@ class CurseForgeAPI(object):
 
         if isinstance(modIds, list):
             modIds = schemas.GetModsByIdsListRequestBody(modIds)
-        response = requests.post(url, headers=self.headers, data=str(modIds))
+        response = self.csesh.post(url, headers=self.headers, data=str(modIds))
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -246,7 +247,7 @@ class CurseForgeAPI(object):
     def getFeatured_mods(self, body: schemas.GetFeaturedModsRequestBody) -> schemas.GetFeaturedModsResponse|schemas.ApiResponseCode:        
         # region init
         # endregion
-        response = requests.post(self.base_url+'/v1/mods/featured', headers=self.headers, data=str(body))
+        response = self.csesh.post(self.base_url+'/v1/mods/featured', headers=self.headers, data=str(body))
         
         status = schemas.ApiResponseCode(response.status_code)
 
@@ -260,7 +261,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/mods/{modId}/description"
         # endregion
 
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -273,7 +274,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/mods/{modId}/files/{fileId}"
         # endregion
 
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -303,7 +304,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/mods/{modId}/files{self.__query_builder(this, *lvars)}"
         # endregion
 
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -314,7 +315,7 @@ class CurseForgeAPI(object):
     def getFiles(self, body: schemas.GetModFilesRequestBody) -> schemas.GetFilesResponse|schemas.ApiResponseCode:
         # region init
         # endregion
-        response = requests.post(self.base_url+'/v1/mods/files', headers=self.headers, data=str(body))
+        response = self.csesh.post(self.base_url+'/v1/mods/files', headers=self.headers, data=str(body))
         
         status = schemas.ApiResponseCode(response.status_code)
 
@@ -328,7 +329,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/mods/{modId}/files/{fileId}/changelog"
         # endregion
 
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -341,7 +342,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/mods/{modId}/files/{fileId}/download-url"
         # endregion
 
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -352,7 +353,7 @@ class CurseForgeAPI(object):
     def getFingerprintsMatches(self, body: schemas.GetFingerprintMatchesRequestBody) -> schemas.GetFingerprintMatchesResponse|schemas.ApiResponseCode:
         # region init
         # endregion
-        response = requests.post(self.base_url+'/v1/fingerprints/', headers=self.headers, data=str(body))
+        response = self.csesh.post(self.base_url+'/v1/fingerprints/', headers=self.headers, data=str(body))
         
         status = schemas.ApiResponseCode(response.status_code)
 
@@ -364,7 +365,7 @@ class CurseForgeAPI(object):
     def getFingerprintsFuzzyMatches(self, body: schemas.GetFuzzyMatchesRequestBody) -> schemas.GetFingerprintsFuzzyMatchesResponse|schemas.ApiResponseCode:
         # region init
         # endregion
-        response = requests.post(self.base_url+'/v1/fingerprints/fuzzy', headers=self.headers, data=str(body))
+        response = self.csesh.post(self.base_url+'/v1/fingerprints/fuzzy', headers=self.headers, data=str(body))
         
         status = schemas.ApiResponseCode(response.status_code)
 
@@ -384,7 +385,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/minecraft/version{self.__query_builder(this, *lvars)}"
         # endregion
 
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -397,7 +398,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/minecraft/version/{version}"
         # endregion
 
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -416,7 +417,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/minecraft/modloader{self.__query_builder(this, *lvars)}"
         # endregion
 
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
@@ -429,7 +430,7 @@ class CurseForgeAPI(object):
         url = self.base_url + f"/v1/minecraft/modloader/{modLoaderName}"
         # endregion
 
-        response = requests.get(url, headers=self.headers)
+        response = self.csesh.get(url, headers=self.headers)
         status = schemas.ApiResponseCode(response.status_code)
 
         if status == schemas.ApiResponseCode.OK:
