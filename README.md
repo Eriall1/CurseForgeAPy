@@ -33,7 +33,7 @@ print(response)
 
 ## Documentation
 
-For full documentation of the CurseForge API, please see the official CurseForge API documentation at https://docs.curseforge.com/.
+For full documentation of the CurseForge API, please see the official CurseForge API documentation at https://docs.curseforge.com/. Docstrings are also available for some functions, however complete docstring creation for all functions is ongoing.
 
 ## Examples
 
