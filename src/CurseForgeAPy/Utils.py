@@ -1,5 +1,5 @@
-from CFAPI import CurseForgeAPI
-from SchemaClasses import FileReleaseType, ApiResponseCode
+from CurseForgeAPy.CFAPI import CurseForgeAPI
+from CurseForgeAPy.SchemaClasses import FileReleaseType, ApiResponseCode
 from datetime import datetime
 
 def downloadFileFromURL(self: CurseForgeAPI, url: str, filename: str):

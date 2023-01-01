@@ -3,6 +3,7 @@ README.md
 pyproject.toml
 src/CurseForgeAPy/CFAPI.py
 src/CurseForgeAPy/SchemaClasses.py
+src/CurseForgeAPy/Utils.py
 src/CurseForgeAPy/__init__.py
 src/CurseForgeAPy/schemaClasses.py
 src/CurseForgeAPy/utils.py
