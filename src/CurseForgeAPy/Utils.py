@@ -1,5 +1,5 @@
-from .CFAPI import CurseForgeAPI
-from .schemaClasses import FileReleaseType, ApiResponseCode
+from CFAPI import CurseForgeAPI
+from SchemaClasses import FileReleaseType, ApiResponseCode
 from datetime import datetime
 
 def downloadFileFromURL(self: CurseForgeAPI, url: str, filename: str):
@@ -8,15 +8,11 @@ def downloadFileFromURL(self: CurseForgeAPI, url: str, filename: str):
     return ApiResponseCode[r.status_code]
 
 def downloadFileFromID(self: CurseForgeAPI, id: str, filename: str):
-    return downloadFileFromURL(self.getFiles([id]).data[0].downloadUrl, filename)
+    return downloadFileFromURL(self.getFiles([id]).data[0]['downloadUrl'], filename)
 
 def downloadFileFromModID(self: CurseForgeAPI, modID: str, filename: str):
     mod = self.getMod(modID)
-    return downloadFileFromURL(mod.data.latestFiles[0].downloadUrl, filename)
-
-def downloadFileFromModIDAndFileID(self: CurseForgeAPI, modID: str, fileID: str, filename: str):
-    file = self.getModFile(modID, fileID).data
-    return downloadFileFromURL(file.downloadUrl, filename)
+    return downloadFileFromURL(mod.data['latestFiles'][0]['downloadUrl'], filename)
 
 def downloadFileFromModIDVersion(self: CurseForgeAPI, modID: str, version: str, filename: str, releaseType: FileReleaseType = FileReleaseType.Release):
     """ Will only download the first file that matches the version and release type (None for any release type)"""
