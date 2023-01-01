@@ -4,7 +4,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/James2854/CurseForgeAPy?style=for-the-badge)](https://github.com/James2854/CurseForgeAPy/stargazers)
 [![GitHub license](https://img.shields.io/github/license/James2854/CurseForgeAPy?style=for-the-badge)](https://github.com/James2854/CurseForgeAPy)
 
-CurseForgeAPy is a Python package that provides a wrapper for the CurseForge API / Eternal API. With CurseForgeAPy, you can easily access and interact with the API in your Python scripts and applications. Currently, the entire API has been wrapped and each data structure has been reconstructed into seperate classes, which can be found within SchemaClasses.py.
+CurseForgeAPy is a Python package that provides a wrapper for the CurseForge API / Eternal API. With CurseForgeAPy, you can easily access and interact with the API in your Python scripts and applications. Currently, the entire API has been wrapped and each data structure has been reconstructed into seperate classes, which can be found within schemaClasses.py.
 
 ## Installation
 
@@ -23,7 +23,7 @@ Once you have obtained an API key, you can use CurseForgeAPy as follows:
 from CurseForgeAPy import CurseForgeAPI
 
 # Instantiate the CurseForgeAPy client
-client = CurseForgeAPI(api_key='YOUR_API_KEY')
+client = CurseForgeAPI('YOUR_API_KEY')
 
 # Use the client to make API requests
 response = client.getGames() # -> returns a GetGamesResponse
@@ -33,7 +33,7 @@ print(response)
 
 ## Documentation
 
-For full documentation of the CurseForge API, please see the official CurseForge API documentation at https://docs.curseforge.com/.
+For full documentation of the CurseForge API, please see the official CurseForge API documentation at https://docs.curseforge.com/. Docstrings are also available for some functions, however complete docstring creation for all functions is ongoing.
 
 ## Examples
 
@@ -60,7 +60,7 @@ categories = cf.getCategories(432)
 
 ### Mods
 ``` Python
-import CurseForgeAPy.SchemaClasses as schemas
+import CurseForgeAPy.schemaClasses as schemas
 
 # search for mods within specific game
 searchResults = cf.searchMods(432)
