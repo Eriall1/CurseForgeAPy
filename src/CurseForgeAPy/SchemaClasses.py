@@ -2,7 +2,29 @@ from __future__ import annotations
 import enum
 from datetime import datetime
 import jsonpickle
-from .Utils import create_datetime
+
+def create_datetime(date_string: str) -> datetime:
+    # Find the index of "T"
+    t_index = date_string.index("T")
+
+    # Slice the string into its date and time parts
+    date_part = date_string[:t_index]
+    time_part = date_string[t_index+1:]
+
+    # Split the date and time parts into their individual components
+    year, month, day = date_part.split("-")
+    hour, minute, second = time_part.split(":")
+    second = second[0:2]
+
+    # Parse the microseconds part if it is present
+    if "." in time_part:
+        dot_index = time_part.index(".")
+        microseconds_part = time_part[dot_index+1:-1]
+        date = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second), int(microseconds_part))
+    else:
+        date = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
+
+    return date
 
 #region Schemas
 
