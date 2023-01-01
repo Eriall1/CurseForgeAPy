@@ -6,7 +6,7 @@ import enum
 import requests_cache as rqc
 
 class CurseForgeAPI(object):
-    def __init__(self, api_key) -> None:
+    def __init__(self, api_key, csesh=None) -> None:
         self.api_key: str = api_key
         self.base_url: str = "https://api.curseforge.com"
         self.headers: dict[str, str] = {
@@ -14,6 +14,7 @@ class CurseForgeAPI(object):
             "Accept": "application/json",
             "x-api-key": self.api_key
         }
+        self.csesh = rqc.CachedSession("CurseForgeAPY-Cache", backend="sqlite", expire_after=300) if csesh is None else csesh
 
     def __query_builder(self, func, *params):
         assert type(func) == type(self.getGames), "func must be a function"

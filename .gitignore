@@ -350,9 +350,12 @@ MigrationBackup/
 .ionide/
 
 # Library Generations
-*.sqllite
+*.sqlite
 
 # PyPi Generated Files
 *.egg-info/
+*.egg-info
 dist/
 *.egg
+src/*.egg-info/
+src/CurseforgeAPy.egg-info/PKG-INFO
