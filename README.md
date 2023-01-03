@@ -4,7 +4,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/James2854/CurseForgeAPy?style=for-the-badge)](https://github.com/James2854/CurseForgeAPy/stargazers)
 [![GitHub license](https://img.shields.io/github/license/James2854/CurseForgeAPy?style=for-the-badge)](https://github.com/James2854/CurseForgeAPy)
 
-CurseForgeAPy is a Python package that provides a wrapper for the CurseForge API / Eternal API. With CurseForgeAPy, you can easily access and interact with the API in your Python scripts and applications. Currently, the entire API has been wrapped and each data structure has been reconstructed into seperate classes, which can be found within SchemaClasses.py.
+CurseForgeAPy is a Python package that provides a wrapper for the CurseForge API / Eternal API. With CurseForgeAPy, you can easily access and interact with the API in your Python scripts and applications.
 
 ## Installation
 
@@ -12,6 +12,21 @@ To install CurseForgeAPy, simply use pip:
 ```bash
 pip install CurseForgeAPy
 ```
+
+## Features
+- Classes for each data structure in the API (found in SchemaClasses.py)
+- Fully cached requests with an expiry of 60 minutes
+- Easy access and interaction with the API in Python scripts and applications
+- Functions for searching and retrieving data from the API
+- Support for pagination when querying the API
+- Error handling for API requests
+- Support for all API endpoints and methods
+- Parsing and manipulating API responses made easy through response classes
+- All classes can be fully instantiated through dictionaries passed into the constructor
+
+## Documentation
+
+For full documentation of the CurseForge API, please see the official CurseForge API documentation at https://docs.curseforge.com/. Docstrings are also available for some functions, however complete docstring creation for all functions is ongoing.
 
 ## Usage
 
@@ -31,14 +46,9 @@ response = client.getGames() # -> returns a GetGamesResponse
 print(response)
 ```
 
-## Documentation
-
-For full documentation of the CurseForge API, please see the official CurseForge API documentation at https://docs.curseforge.com/. Docstrings are also available for some functions, however complete docstring creation for all functions is ongoing.
-
 ## Examples
 
 Here are some examples of how you can use CurseForgeAPy to access and interact with the CurseForge API:
-
 
 ### Games
 ``` Python
