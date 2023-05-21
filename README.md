@@ -6,6 +6,17 @@
 
 CurseForgeAPy is a Python package that provides a wrapper for the CurseForge API / Eternal API. With CurseForgeAPy, you can easily access and interact with the API in your Python scripts and applications.
 
+## Warning
+The CurseForgeApi has changed since the creation of this wrapper, and I do not have the time to fix it.
+If ANYONE would like to contribute it would be vey welcome :)
+Otherwise, some methods may have issues, namely mod search. 
+There are some quick fixes that can be done on a local copy:
+- patch the Mod class to accept latestEarlyAccessFilesIndexes keyword
+- patch the FileIndex class to modify the modLoader kwarg to be optional or remove it.
+
+I do not have time to go through the API, especially when it was painful enough to work through undocumented functionality when initially creating the package.
+Curse forge is really bad at documenting their api, and there is no record of changes I could find. Currently, the documentation matches the previous specifications, however there is undocumented changes.
+
 ## Installation
 
 To install CurseForgeAPy, simply use pip:
